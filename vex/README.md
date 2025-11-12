@@ -11,32 +11,36 @@ Because VEX doesn’t support structs to represent tokens or manage lexer state,
 
 This allows me to split the string by the underscore (`_`) and create one point per token, assigning attributes such as `s@type` and `s@literal`.
 
-To test the lexer, I append a second **Point Wrangle** that compares the `type` and `literal` attributes against expected values.
-
-![Houdini screenshot showcasing the lexer](screenshot.png)
-
 The source code for the interpreter can be provided in a couple of ways.
 
 ### 1. From a channel parameter
 
-```c
-...
+![Houdini screenshot showcasing the lexer](screenshot.png)
 
+```c
 string input = chs("input");
 int position = 0;
-...
+int readPosition = 0;
+string ch = "\0";
+readChar(input, position, readPosition, ch);
 ```
 
 This creates a string parameter on the wrangle that you can type code into directly.
 
 ### 2. From an incoming string attribute
 
-```c
-...
+To test the lexer, I append a second **Point Wrangle** that compares the `type` and `literal` attributes against expected values.
 
+![Houdini screenshot showcasing the lexer test](screenshot2.png)
+
+Similar-colored nodes represent their relationship: the source code provided in `create_input` is what’s being tested in `test_lexer`.
+
+```c
 string input = s@input;
 int position = 0;
-...
+int readPosition = 0;
+string ch = "\0";
+readChar(input, position, readPosition, ch);
 ```
 
 This approach assumes the incoming geometry stream has a detail attribute named s@input containing the source code.
